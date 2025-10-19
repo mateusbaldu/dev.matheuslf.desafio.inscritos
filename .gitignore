@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 secrets.properties
+HttpRequests
 
 ### STS ###
 .apt_generated
