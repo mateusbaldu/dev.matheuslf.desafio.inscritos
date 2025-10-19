@@ -1,5 +1,6 @@
 package dev.matheuslf.desafio.inscritos.entities;
 
+import dev.matheuslf.desafio.inscritos.entities.dtos.user.UserCreateDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -14,11 +15,13 @@ public class User {
     @Column(name = "user_id")
     private UUID id;
 
+    private String name;
+
     @Email
-    @NotNull
+    @NotNull(message = "Email can't be null")
     private String email;
 
-    private String name;
+    @NotNull(message = "Password can't be null")
     private String password;
 
     public User(UUID id, String email, String name, String password) {
