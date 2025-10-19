@@ -14,6 +14,6 @@ public record TaskCreateDto(
         Priority priority,
         Status status,
         LocalDate dueDate,
-        Project projectId
+        Long projectId
 ) {
 }

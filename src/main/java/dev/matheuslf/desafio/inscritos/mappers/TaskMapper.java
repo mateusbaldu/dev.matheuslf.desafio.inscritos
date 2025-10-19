@@ -13,5 +13,6 @@ public interface TaskMapper {
 
     void createMapping(TaskCreateDto dto, @MappingTarget Task task);
 
+    @Mapping(source = "project.id", target = "projectId")
     TaskResponseDto responseMapping(Task task);
 }

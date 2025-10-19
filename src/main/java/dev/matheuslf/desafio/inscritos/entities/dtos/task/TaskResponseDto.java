@@ -13,6 +13,6 @@ public record TaskResponseDto(
         Priority priority,
         Status status,
         LocalDate dueDate,
-        Project projectId
+        Long projectId
 ) {
 }

@@ -32,16 +32,16 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private Project projectId;
+    private Project project;
 
-    public Task(Long id, String title, String description, Priority priority, Status status, LocalDate dueDate, Project projectId) {
+    public Task(Long id, String title, String description, Priority priority, Status status, LocalDate dueDate, Project project) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.status = status;
         this.dueDate = dueDate;
-        this.projectId = projectId;
+        this.project = project;
     }
 
     public Task() {
@@ -71,8 +71,8 @@ public class Task {
         return dueDate;
     }
 
-    public Project getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
     public void setId(Long id) {
@@ -99,7 +99,7 @@ public class Task {
         this.dueDate = dueDate;
     }
 
-    public void setProjectId(Project projectId) {
-        this.projectId = projectId;
+    public void setProject(Project projectId) {
+        this.project = projectId;
     }
 }

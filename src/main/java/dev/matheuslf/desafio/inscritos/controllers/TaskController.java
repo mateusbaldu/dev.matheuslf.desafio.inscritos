@@ -33,7 +33,7 @@ public class TaskController {
     }
 
     @PutMapping("/tasks/{id}/status")
-    public ResponseEntity<TaskResponseDto> updateStatus(@RequestBody String status, @PathVariable Long id) {
+    public ResponseEntity<TaskResponseDto> updateStatus(@RequestBody Status status, @PathVariable Long id) {
         return ResponseEntity.ok(taskService.updateStatus(id, status));
     }
 
