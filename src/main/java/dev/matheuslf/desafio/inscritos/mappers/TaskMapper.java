@@ -1,4 +1,4 @@
-package dev.matheuslf.desafio.inscritos.configs.mappers;
+package dev.matheuslf.desafio.inscritos.mappers;
 
 import dev.matheuslf.desafio.inscritos.entities.Task;
 import dev.matheuslf.desafio.inscritos.entities.dtos.task.TaskCreateDto;

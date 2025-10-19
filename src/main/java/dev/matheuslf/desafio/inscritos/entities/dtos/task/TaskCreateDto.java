@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record TaskCreateDto(
-        @NotNull
+        @NotNull(message = "title is required")
         String title,
         String description,
         Priority priority,

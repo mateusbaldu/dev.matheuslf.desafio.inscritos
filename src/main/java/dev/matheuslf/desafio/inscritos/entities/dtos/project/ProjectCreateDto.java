@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record ProjectCreateDto(
-        @NotNull
+        @NotNull(message = "name is required")
         String name,
         String description,
         LocalDate startDate,

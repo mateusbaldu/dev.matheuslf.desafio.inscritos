@@ -14,7 +14,7 @@ public class Project {
     @Column(name = "project_id")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "name is required")
     @Size(min = 3, max = 100)
     private String name;
     private String description;
