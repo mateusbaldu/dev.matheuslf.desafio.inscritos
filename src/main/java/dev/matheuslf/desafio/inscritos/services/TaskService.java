@@ -27,7 +27,7 @@ public class TaskService {
     }
 
     public TaskResponseDto create(TaskCreateDto dto) {
-        Project p = projectRepository.findById(dto.projectId()).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        Project p = projectRepository.findById(dto.projectId()).orElseThrow(() -> new ResourceNotFoundException("Project with id " + dto.projectId() + "not found"));
         Task task = new Task();
         taskMapper.createMapping(dto, task);
         task.setProject(p);
@@ -41,7 +41,7 @@ public class TaskService {
     }
 
     public TaskResponseDto updateStatus(Long id, Status status) {
-        Task t = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        Task t = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + "not found"));
         t.setStatus(status);
         Task saved = taskRepository.save(t);
         return taskMapper.responseMapping(saved);
