@@ -1,4 +1,18 @@
 package dev.matheuslf.desafio.inscritos.entities.dtos.task;
 
-public record TaskResponseDto() {
+import dev.matheuslf.desafio.inscritos.entities.Project;
+import dev.matheuslf.desafio.inscritos.entities.enums.Priority;
+import dev.matheuslf.desafio.inscritos.entities.enums.Status;
+
+import java.time.LocalDate;
+
+public record TaskResponseDto(
+        Long id,
+        String title,
+        String description,
+        Priority priority,
+        Status status,
+        LocalDate dueDate,
+        Project projectId
+) {
 }
