@@ -1,13 +1,11 @@
-package dev.matheuslf.desafio.inscritos.entities.dtos.user;
+package dev.matheuslf.desafio.inscritos.entities.dtos.login;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
-public record UserCreateDto (
-        String name,
+public record LoginRequest(
         @NotEmpty(message = "Email is required")
         String email,
         @NotEmpty(message = "Password is required")
         String password
-){
+) {
 }
