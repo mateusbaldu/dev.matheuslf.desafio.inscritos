@@ -12,5 +12,6 @@ public interface UserMapper {
     void updateMapping(UserUpdateDto dto, @MappingTarget User user);
 
     void createMapping(UserCreateDto dto, @MappingTarget User user);
+
     UserResponseDto responseMapping(User user);
 }

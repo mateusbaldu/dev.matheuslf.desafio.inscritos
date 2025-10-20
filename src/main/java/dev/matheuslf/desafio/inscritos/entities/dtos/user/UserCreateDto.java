@@ -1,7 +1,6 @@
 package dev.matheuslf.desafio.inscritos.entities.dtos.user;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 public record UserCreateDto (
         String name,
