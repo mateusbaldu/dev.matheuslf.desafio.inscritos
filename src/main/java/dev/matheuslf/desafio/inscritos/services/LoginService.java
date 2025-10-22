@@ -1,6 +1,5 @@
 package dev.matheuslf.desafio.inscritos.services;
 
-import dev.matheuslf.desafio.inscritos.configs.security.TokenConfig;
 import dev.matheuslf.desafio.inscritos.entities.User;
 import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginRequest;
 import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginResponse;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final TokenConfig tokenConfig;
+    private final TokenService tokenService;
     private final UserRepository userRepository;
 
-    public LoginService(BCryptPasswordEncoder bCryptPasswordEncoder, TokenConfig tokenConfig, UserRepository userRepository) {
+    public LoginService(BCryptPasswordEncoder bCryptPasswordEncoder, TokenService tokenService, UserRepository userRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.tokenConfig = tokenConfig;
+        this.tokenService = tokenService;
         this.userRepository = userRepository;
     }
 
@@ -31,6 +30,6 @@ public class LoginService {
         }
 
         long expiresIn = 1800L;
-        return new LoginResponse(tokenConfig.generateToken(user), expiresIn);
+        return new LoginResponse(tokenService.generateToken(user), expiresIn);
     }
 }

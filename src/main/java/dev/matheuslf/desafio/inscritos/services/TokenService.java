@@ -1,4 +1,4 @@
-package dev.matheuslf.desafio.inscritos.configs.security;
+package dev.matheuslf.desafio.inscritos.services;
 
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-public class TokenConfig {
+public class TokenService {
     private final JwtEncoder jwtEncoder;
 
-    public TokenConfig(JwtEncoder jwtEncoder) {
+    public TokenService(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
 
