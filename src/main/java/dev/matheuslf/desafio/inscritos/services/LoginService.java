@@ -29,7 +29,7 @@ public class LoginService {
             throw new InvalidLoginException("Invalid password");
         }
 
-        long expiresIn = 1800L;
-        return new LoginResponse(tokenService.generateToken(user), expiresIn);
+        long expiresAt = 1800L;
+        return new LoginResponse(tokenService.generateToken(user), expiresAt);
     }
 }
