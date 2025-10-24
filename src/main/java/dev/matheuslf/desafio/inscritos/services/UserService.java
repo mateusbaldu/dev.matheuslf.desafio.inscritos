@@ -27,7 +27,8 @@ public class UserService {
     public UserResponseDto create(UserCreateDto dto) {
         User user = new User();
         userMapper.createMapping(dto, user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String encodedPassword = passwordEncoder.encode(dto.password());
+        user.setPassword(encodedPassword);
         User saved = userRepository.save(user);
         return userMapper.responseMapping(saved);
     }

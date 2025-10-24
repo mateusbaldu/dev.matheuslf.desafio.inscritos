@@ -1,5 +1,5 @@
 
-package dev.matheuslf.desafio.inscritos.services;
+package dev.matheuslf.desafio.inscritos.generator;
 
 import dev.matheuslf.desafio.inscritos.entities.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +23,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TokenServiceTest {
+class TokenGeneratorTest {
     @Mock
     private JwtEncoder jwtEncoder;
 
     @InjectMocks
-    private TokenService tokenService;
+    private TokenGenerator tokenGenerator;
 
     private User user;
     private Jwt fakeJwt;
@@ -61,7 +61,7 @@ class TokenServiceTest {
         void generateToken_returnTokenValue_WhenEverythingIsOk() {
             doReturn(fakeJwt).when(jwtEncoder).encode(any(JwtEncoderParameters.class));
 
-            String output = tokenService.generateToken(user);
+            String output = tokenGenerator.generateToken(user);
 
             assertNotNull(output);
             verify(jwtEncoder, times(1)).encode(any(JwtEncoderParameters.class));

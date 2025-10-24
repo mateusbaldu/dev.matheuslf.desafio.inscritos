@@ -5,8 +5,8 @@ import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginRequest;
 import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginResponse;
 import dev.matheuslf.desafio.inscritos.exceptions.InvalidLoginException;
 import dev.matheuslf.desafio.inscritos.exceptions.ResourceNotFoundException;
+import dev.matheuslf.desafio.inscritos.generator.TokenGenerator;
 import dev.matheuslf.desafio.inscritos.repositories.UserRepository;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,7 +33,7 @@ class LoginServiceTest {
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
-    private TokenService tokenService;
+    private TokenGenerator tokenGenerator;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -84,14 +84,14 @@ class LoginServiceTest {
         void login_returnLoginResponse_whenEverythingIsOk() {
             doReturn(Optional.of(user)).when(userRepository).findByEmail("testemail@email.com");
             when(user.isLoginCorrect(loginRequest, bCryptPasswordEncoder)).thenReturn(true);
-            doReturn(fakeTokenValue).when(tokenService).generateToken(user);
+            doReturn(fakeTokenValue).when(tokenGenerator).generateToken(user);
 
             var output = loginService.login(loginRequest);
 
             assertNotNull(output);
             assertEquals(output, loginResponse);
             verify(userRepository, times(1)).findByEmail(anyString());
-            verify(tokenService, times(1)).generateToken(any(User.class));
+            verify(tokenGenerator, times(1)).generateToken(any(User.class));
         }
 
         @Test

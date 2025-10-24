@@ -5,6 +5,7 @@ import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginRequest;
 import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginResponse;
 import dev.matheuslf.desafio.inscritos.exceptions.InvalidLoginException;
 import dev.matheuslf.desafio.inscritos.exceptions.ResourceNotFoundException;
+import dev.matheuslf.desafio.inscritos.generator.TokenGenerator;
 import dev.matheuslf.desafio.inscritos.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final TokenService tokenService;
+    private final TokenGenerator tokenGenerator;
     private final UserRepository userRepository;
 
-    public LoginService(BCryptPasswordEncoder bCryptPasswordEncoder, TokenService tokenService, UserRepository userRepository) {
+    public LoginService(BCryptPasswordEncoder bCryptPasswordEncoder, TokenGenerator tokenGenerator, UserRepository userRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.tokenService = tokenService;
+        this.tokenGenerator = tokenGenerator;
         this.userRepository = userRepository;
     }
 
@@ -30,6 +31,6 @@ public class LoginService {
         }
 
         long expiresAt = 1800L;
-        return new LoginResponse(tokenService.generateToken(user), expiresAt);
+        return new LoginResponse(tokenGenerator.generateToken(user), expiresAt);
     }
 }
