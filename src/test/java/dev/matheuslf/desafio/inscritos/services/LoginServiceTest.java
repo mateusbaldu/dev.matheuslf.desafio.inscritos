@@ -55,12 +55,12 @@ class LoginServiceTest {
                 .subject(uuid.toString())
                 .expiresAt(Instant.now().plusSeconds(1800))
                 .build();
-        JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(fakeClaims);
         Jwt fakeJwt = Jwt.withTokenValue("fake-token")
                 .header("Test", "none")
                 .claims(claims -> claims.putAll(fakeClaims.getClaims()))
                 .build();
         fakeTokenValue = fakeJwt.getTokenValue();
+
         user = new User(
                 uuid,
                 "testemail@email.com",
