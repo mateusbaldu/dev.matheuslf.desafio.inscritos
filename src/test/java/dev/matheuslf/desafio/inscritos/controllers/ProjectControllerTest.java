@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -39,22 +38,22 @@ class ProjectControllerTest {
     @MockitoBean
     private ProjectService projectService;
 
-    private ProjectCreateDto projectCreateDto;
-    private ProjectResponseDto projectResponseDto;
+    private ProjectCreateDto projectCreate;
+    private ProjectResponseDto projectResponse;
     private User user;
 
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.mockMvc(mvc);
 
-        projectCreateDto = new ProjectCreateDto(
+        projectCreate = new ProjectCreateDto(
                 "Test Project",
                 "project test description",
                 LocalDate.now(),
                 LocalDate.MAX
         );
 
-        projectResponseDto = new ProjectResponseDto(
+        projectResponse = new ProjectResponseDto(
                 1L,
                 "Test Project",
                 "project test description",
@@ -75,12 +74,12 @@ class ProjectControllerTest {
         @Test
         @DisplayName("POST /project-manager/projects - should return Project Response when everything is ok")
         void create_returnProjectResponse_whenEverthingIsOk() {
-            doReturn(projectResponseDto).when(projectService).create(any(ProjectCreateDto.class));
+            doReturn(projectResponse).when(projectService).create(any(ProjectCreateDto.class));
 
             RestAssuredMockMvc
                     .given()
                     .contentType(ContentType.JSON)
-                    .body(projectCreateDto)
+                    .body(projectCreate)
                     .postProcessors(
                             jwt().jwt(j -> j.subject(user.getId().toString())),
                             csrf()
@@ -91,7 +90,7 @@ class ProjectControllerTest {
                     .statusCode(HttpStatus.CREATED.value())
                     .body("id", equalTo(1))
                     .body("description", equalTo("project test description"));
-            verify(projectService, times(1)).create(projectCreateDto);
+            verify(projectService, times(1)).create(projectCreate);
         }
     }
 
@@ -100,7 +99,7 @@ class ProjectControllerTest {
         @Test
         @DisplayName("GET /project-manager/projects - should return Page of Project Response when everything is ok")
         void listAll_returnPageProjectResponse_whenEverthingIsOk() {
-            Page<ProjectResponseDto> pageResponse = new PageImpl<>(List.of(projectResponseDto), PageRequest.of(0,10), 1);
+            Page<ProjectResponseDto> pageResponse = new PageImpl<>(List.of(projectResponse), PageRequest.of(0,10), 1);
             doReturn(pageResponse).when(projectService).listAll(any(Pageable.class));
 
             RestAssuredMockMvc
