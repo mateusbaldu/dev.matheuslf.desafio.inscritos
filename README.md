@@ -77,6 +77,13 @@ Utilize o Maven para iniciar a aplicação.
 ```
 A API estará disponível em http://localhost:8080
 
+## Documentação da API (Swagger UI)
+
+A API possui documentação automática gerada via **SpringDoc OpenAPI**. Após iniciar a aplicação, você pode acessar a interface interativa para testar os endpoints diretamente pelo navegador:
+
+- **Interface Visual (Swagger UI):** [http://localhost:8080/project-manager/swagger-ui/index.html](http://localhost:8080/project-manager/swagger-ui/index.html)
+- **Documentação em JSON:** [http://localhost:8080/project-manager/v3/api-docs](http://localhost:8080/project-manager/v3/api-docs)
+
 
 ## Endpoints da API
 
