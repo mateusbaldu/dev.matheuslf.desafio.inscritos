@@ -34,6 +34,9 @@ public class SecurityConfig {
                 authorize ->
                         authorize.requestMatchers(HttpMethod.POST, "/project-manager/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/project-manager/users/new").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/swagger-ui**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
