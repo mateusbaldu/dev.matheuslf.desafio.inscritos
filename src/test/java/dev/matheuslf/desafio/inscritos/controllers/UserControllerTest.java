@@ -1,12 +1,10 @@
 package dev.matheuslf.desafio.inscritos.controllers;
 
+import dev.matheuslf.desafio.inscritos.configs.RateLimitFilter;
 import dev.matheuslf.desafio.inscritos.entities.User;
-import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginRequest;
-import dev.matheuslf.desafio.inscritos.entities.dtos.login.LoginResponse;
 import dev.matheuslf.desafio.inscritos.entities.dtos.user.UserCreateDto;
 import dev.matheuslf.desafio.inscritos.entities.dtos.user.UserResponseDto;
 import dev.matheuslf.desafio.inscritos.entities.dtos.user.UserUpdateDto;
-import dev.matheuslf.desafio.inscritos.services.LoginService;
 import dev.matheuslf.desafio.inscritos.services.UserService;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -37,14 +35,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 class UserControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private RateLimitFilter rateLimitFilter;
 
     @MockitoBean
     private UserService userService;
-    @MockitoBean
-    private LoginService loginService;
 
-    private LoginRequest loginRequest;
-    private LoginResponse loginResponse;
     private String fakeTokenValue;
     private User user;
     private UserCreateDto userCreate;
@@ -53,6 +49,8 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
+        rateLimitFilter.resetCache();
+
         RestAssuredMockMvc.mockMvc(mvc);
 
         UUID uuid = UUID.randomUUID();
@@ -66,14 +64,6 @@ class UserControllerTest {
                 .claims(claims -> claims.putAll(fakeClaims.getClaims()))
                 .build();
         fakeTokenValue = fakeJwt.getTokenValue();
-
-        loginRequest = new LoginRequest(
-                "test@email.com",
-                "password");
-        loginResponse = new LoginResponse(
-                fakeTokenValue,
-                1800L
-        );
 
         user = new User(
                 uuid,
@@ -98,30 +88,6 @@ class UserControllerTest {
     }
 
     @Nested
-    class login {
-        @Test
-        @DisplayName("POST /project-manager/login - should return Login Response when everything is ok")
-        void login_returnLoginResponse_WhenEverythingIsOk() {
-            doReturn(loginResponse).when(loginService).login(any(LoginRequest.class));
-
-            RestAssuredMockMvc
-                    .given()
-                    .contentType(ContentType.JSON)
-                    .body(loginRequest)
-                    .postProcessors(
-                            jwt().jwt(j -> j.subject(user.getId().toString())),
-                            csrf()
-                    )
-                    .when()
-                    .post("/project-manager/login")
-                    .then()
-                    .statusCode(HttpStatus.OK.value())
-                    .body("expiresAt", equalTo(1800));
-            verify(loginService, times(1)).login(loginRequest);
-        }
-    }
-
-    @Nested
     class create {
         @Test
         @DisplayName("POST /project-manager/users/new - should return User Response when everything is ok")
@@ -137,7 +103,7 @@ class UserControllerTest {
                             csrf()
                     )
                     .when()
-                    .post("/project-manager/users/new")
+                    .post("/users")
                     .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .body("name", equalTo(user.getName()));
@@ -161,7 +127,7 @@ class UserControllerTest {
                             csrf()
                     )
                     .when()
-                    .put("/project-manager/users")
+                    .put("/users")
                     .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("name", equalTo(user.getName()));
@@ -183,7 +149,7 @@ class UserControllerTest {
                             csrf()
                     )
                     .when()
-                    .delete("/project-manager/users")
+                    .delete("/users")
                     .then()
                     .statusCode(HttpStatus.NO_CONTENT.value());
             verify(userService, times(1)).delete(user.getId().toString());

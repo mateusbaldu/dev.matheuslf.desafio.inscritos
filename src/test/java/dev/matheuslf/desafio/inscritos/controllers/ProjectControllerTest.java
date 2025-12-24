@@ -1,5 +1,6 @@
 package dev.matheuslf.desafio.inscritos.controllers;
 
+import dev.matheuslf.desafio.inscritos.configs.RateLimitFilter;
 import dev.matheuslf.desafio.inscritos.entities.User;
 import dev.matheuslf.desafio.inscritos.entities.dtos.project.ProjectCreateDto;
 import dev.matheuslf.desafio.inscritos.entities.dtos.project.ProjectResponseDto;
@@ -34,6 +35,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 class ProjectControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private RateLimitFilter rateLimitFilter;
 
     @MockitoBean
     private ProjectService projectService;
@@ -44,6 +47,8 @@ class ProjectControllerTest {
 
     @BeforeEach
     void setUp() {
+        rateLimitFilter.resetCache();
+
         RestAssuredMockMvc.mockMvc(mvc);
 
         projectCreate = new ProjectCreateDto(
@@ -85,7 +90,7 @@ class ProjectControllerTest {
                             csrf()
                     )
                     .when()
-                    .post("/project-manager/projects")
+                    .post("/projects")
                     .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .body("id", equalTo(1))
@@ -109,7 +114,7 @@ class ProjectControllerTest {
                             csrf()
                     )
                     .when()
-                    .get("/project-manager/projects")
+                    .get("/projects")
                     .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("totalElements", equalTo(1))

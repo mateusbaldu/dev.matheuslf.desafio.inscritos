@@ -1,4 +1,4 @@
-package dev.matheuslf.desafio.inscritos.configs.security;
+package dev.matheuslf.desafio.inscritos.configs;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -32,8 +32,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
                 authorize ->
-                        authorize.requestMatchers(HttpMethod.POST, "/project-manager/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/project-manager/users/new").permitAll()
+                        authorize.requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/swagger-ui**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()

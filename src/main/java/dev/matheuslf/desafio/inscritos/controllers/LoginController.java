@@ -28,7 +28,7 @@ public class LoginController {
             @ApiResponse(responseCode = "404", description = "User with email not found"),
             @ApiResponse(responseCode = "401", description = "Invalid password")
     })
-    @PostMapping("/login")
+    @PostMapping
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(loginService.login(loginRequest));
     }

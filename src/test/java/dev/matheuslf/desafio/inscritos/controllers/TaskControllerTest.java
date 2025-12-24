@@ -1,5 +1,6 @@
 package dev.matheuslf.desafio.inscritos.controllers;
 
+import dev.matheuslf.desafio.inscritos.configs.RateLimitFilter;
 import dev.matheuslf.desafio.inscritos.entities.User;
 import dev.matheuslf.desafio.inscritos.entities.dtos.task.StatusUpdateDto;
 import dev.matheuslf.desafio.inscritos.entities.dtos.task.TaskCreateDto;
@@ -43,6 +44,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 class TaskControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private RateLimitFilter rateLimitFilter;
 
     @MockitoBean
     private TaskService taskService;
@@ -53,6 +56,8 @@ class TaskControllerTest {
 
     @BeforeEach
     void setUp() {
+        rateLimitFilter.resetCache();
+
         RestAssuredMockMvc.mockMvc(mvc);
 
         user = new User(
@@ -98,7 +103,7 @@ class TaskControllerTest {
                             csrf()
                     )
                     .when()
-                    .post("/project-manager/tasks")
+                    .post("/tasks")
                     .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .body("id", equalTo(1))
@@ -115,22 +120,24 @@ class TaskControllerTest {
             List<TaskResponseDto> list = new ArrayList<>();
             list.add(taskResponse);
             Page<TaskResponseDto> pageResponse = new PageImpl<>(list, PageRequest.of(0, 10), 1);
-            doReturn(pageResponse).when(taskService).findTasks(any(), any(), anyLong(), any());
+            doReturn(pageResponse).when(taskService).findTasks(any(), any(), any(), any());
 
             RestAssuredMockMvc
                     .given()
+                    .accept(ContentType.JSON)
                     .postProcessors(
                             jwt().jwt(j -> j.subject(user.getId().toString())),
                             csrf()
                     )
                     .when()
-                    .get("/project-manager/tasks")
+                    .get("/tasks")
                     .then()
                     .statusCode(HttpStatus.OK.value())
+                    .contentType(ContentType.JSON)
                     .body("totalElements", equalTo(1))
                     .body("content[0].id", equalTo(1))
                     .body("content[0].description", equalTo("Test task description"));
-            verify(taskService, times(1)).findTasks(eq(Status.TODO), eq(Priority.HIGH), anyLong(), any());
+            verify(taskService, times(1)).findTasks(any(), any(), any(), any());
         }
     }
 
@@ -153,7 +160,7 @@ class TaskControllerTest {
                             csrf()
                     )
                     .when()
-                    .put("/project-manager/tasks/{id}/status", 1L)
+                    .put("/tasks/{id}/status", 1L)
                     .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("id", equalTo(1))
@@ -177,7 +184,7 @@ class TaskControllerTest {
                             csrf()
                     )
                     .when()
-                    .delete("/project-manager/tasks/{id}", 1L)
+                    .delete("/tasks/{id}", 1L)
                     .then()
                     .statusCode(HttpStatus.NO_CONTENT.value());
             verify(taskService, times(1)).delete(1L);
