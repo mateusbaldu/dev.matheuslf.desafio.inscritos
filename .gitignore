@@ -3,12 +3,12 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-secrets.properties
 HttpRequests
 *.pub
 *.key
 *.sql
-
+.env
+secrets.properties
 
 ### STS ###
 .apt_generated
