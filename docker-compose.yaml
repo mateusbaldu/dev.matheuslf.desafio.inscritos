@@ -32,6 +32,9 @@ services:
 
       - JWT_PUBLIC_KEY=file:/app/keys/app.pub
       - JWT_PRIVATE_KEY=file:/app/keys/app.key
+    volumes:
+      - ./app.pub:/app/keys/app.pub:ro
+      - ./app.key:/app/keys/app.key:ro
     networks:
       - app-network
 

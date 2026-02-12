@@ -14,6 +14,7 @@ Esse desafio foi feito com base no desafio proposto pelo professor [Matheus Ferr
 - Spring Data JPA
 - Spring Security (Autenticação com JWT e chaves RSA)
 - PostgreSQL 17
+a- Docker e Docker Compose
 - Maven
 - MapStruct
 - Bean Validation
@@ -30,15 +31,62 @@ Esse desafio foi feito com base no desafio proposto pelo professor [Matheus Ferr
 
 ## Pré-requisitos para Execução
 
-Para executar o projeto, é necessário ter o ambiente configurado com:
+### Execução com Docker (Recomendado)
+
+Para executar com Docker, é necessário ter:
+
+- Docker e Docker Compose instalados.
+
+### Execução Local
+
+Para executar o projeto localmente sem Docker:
 
 - JDK 21 ou superior.
 - Maven 3.9+.
 - Uma instância do PostgreSQL em execução.
 
-As credenciais do banco de dados e as chaves RSA para a assinatura dos tokens JWT são carregadas a partir de um arquivo `secrets.properties`, que não está incluído no controle de versão por razões de segurança. A aplicação está configurada para importar estas variáveis a partir desse arquivo na raiz do projeto, conforme indicado no `application.properties`.
+As credenciais do banco de dados e as chaves RSA para a assinatura dos tokens JWT podem ser configuradas através de variáveis de ambiente ou de um arquivo `.env` (para Docker).
 
 ## Como Executar
+
+### Opção 1: Com Docker (Recomendado)
+
+**1. Clone o repositório:**
+```bash
+git clone https://github.com/mateusbaldu/dev.matheuslf.desafio.inscritos
+cd dev.matheuslf.desafio.inscritos
+```
+
+**2. Gere suas chaves RSA (caso não possua):**
+```bash
+# Gerar a chave privada
+openssl genpkey -algorithm RSA -out app.key -pkeyopt rsa_keygen_bits:2048
+
+# Extrair a chave pública da chave privada
+openssl rsa -in app.key -pubout -out app.pub
+```
+
+**3. Crie o arquivo `.env` na raiz do projeto:**
+```bash
+# Configuração do Banco de Dados PostgreSQL
+POSTGRES_DB=inscritos_db
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
+
+**4. Execute com Docker Compose:**
+```bash
+docker-compose up --build
+```
+
+A API estará disponível em http://localhost:8080
+
+> **Nota:** O Docker Compose irá criar automaticamente o container do PostgreSQL e da aplicação, configurando todas as variáveis de ambiente necessárias. As chaves RSA serão montadas automaticamente dentro do container.
+
+---
+
+### Opção 2: Execução Local (Sem Docker)
+
 **1. Clone o repositório:**
 ```bash
 git clone https://github.com/mateusbaldu/dev.matheuslf.desafio.inscritos
